@@ -1,10 +1,37 @@
 import { defaultSettings } from '../shared/profiles';
 import type { AppSettings, BridgeApi, CommandPreview, Device, Diagnostics, LaunchProfile, ReverseStreamSettings, Session } from '../shared/types';
 
-const demoDevices: Device[] = [];
+const demoDevices: Device[] = [
+  {
+    serial: '192.168.1.44:5555',
+    state: 'device',
+    transport: 'wireless',
+    model: 'Pixel 8 Pro',
+    product: 'husky'
+  },
+  {
+    serial: 'R5CT90AB12K',
+    state: 'device',
+    transport: 'usb',
+    model: 'Galaxy S24',
+    product: 'e3q'
+  }
+];
 
 let settings: AppSettings = { ...defaultSettings };
-let sessions: Session[] = [];
+let sessions: Session[] = [
+  {
+    id: 'demo-session-fast',
+    deviceSerial: '192.168.1.44:5555',
+    command: 'scrcpy.exe --serial 192.168.1.44:5555 --max-size 1080 --video-bit-rate 8M --max-fps 60',
+    status: 'running',
+    pid: 4242,
+    startedAt: new Date().toISOString(),
+    logs: [
+      { at: new Date().toISOString(), stream: 'system', text: 'Demo session started. Real scrcpy runs inside Electron.' }
+    ]
+  }
+];
 let reverseRunning = false;
 let reversePort = 7420;
 let reverseStream: ReverseStreamSettings = { codec: 'webrtc-h264', fps: 60, quality: 68, maxWidth: 1920, maxHeight: 1080 };

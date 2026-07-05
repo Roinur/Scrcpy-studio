@@ -2,6 +2,16 @@
 
 Scrcpy Studio is a Windows-first desktop control surface for scrcpy and ADB. It wraps the bundled scrcpy and Android platform-tools binaries with a polished queue-free UI, device list, profiles, session logs, wireless ADB helpers, and reverse remote controls.
 
+## Screenshots
+
+### Dark mode
+
+![Scrcpy Studio dark mode](docs/screenshots/scrcpy-studio-dark.png)
+
+### Light mode
+
+![Scrcpy Studio light mode](docs/screenshots/scrcpy-studio-light.png)
+
 ## Features
 
 - Detect USB, wireless, emulator, unauthorized, and offline ADB devices.
