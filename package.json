@@ -1,0 +1,67 @@
+{
+  "name": "scrcpy-studio",
+  "version": "0.1.18",
+  "description": "A polished Windows-first desktop control surface for scrcpy and ADB.",
+  "main": "dist/main/main/main.js",
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently -k \"npm:dev:renderer\" \"npm:dev:main\" \"npm:dev:electron\"",
+    "dev:renderer": "vite --host 127.0.0.1",
+    "dev:main": "wait-on tcp:5173 && tsc -p tsconfig.main.json --watch --preserveWatchOutput",
+    "dev:electron": "wait-on tcp:5173 dist/main/main/main.js && electron .",
+    "start": "electron .",
+    "build": "tsc -p tsconfig.main.json && node scripts/write-preload-cjs.mjs && vite build",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit && tsc -p tsconfig.main.json --noEmit",
+    "package": "npm run build && electron-builder --win --x64"
+  },
+  "build": {
+    "appId": "cc.scrcpystudio.app",
+    "productName": "Scrcpy Studio",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "assets/**/*",
+      "package.json"
+    ],
+    "asar": false,
+    "extraResources": [
+      {
+        "from": "vendor",
+        "to": "vendor",
+        "filter": [
+          "**/*"
+        ]
+      }
+    ],
+    "win": {
+      "icon": "assets/icon.ico",
+      "requestedExecutionLevel": "requireAdministrator",
+      "target": "nsis"
+    }
+  },
+  "dependencies": {
+    "@vitejs/plugin-react": "^5.1.1",
+    "electron-store": "^10.1.0",
+    "lucide-react": "^0.561.0",
+    "nanoid": "^5.1.6",
+    "vite": "^7.2.7",
+    "zod": "^4.2.1"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.3",
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "concurrently": "^9.2.1",
+    "electron": "^39.2.7",
+    "electron-builder": "^26.0.12",
+    "png-to-ico": "^3.0.1",
+    "react": "^19.2.1",
+    "react-dom": "^19.2.1",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.15",
+    "wait-on": "^9.0.3"
+  }
+}

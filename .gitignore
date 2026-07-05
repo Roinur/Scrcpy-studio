@@ -1,0 +1,9 @@
+node_modules/
+dist/
+release/
+.vite/
+coverage/
+npm-debug.log*
+vendor/scrcpy/
+vendor/platform-tools/
+*.local
