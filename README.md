@@ -23,6 +23,10 @@ Scrcpy Studio is a Windows-first desktop control surface for scrcpy and ADB. It 
 - Includes a reverse remote server for controlling the Windows desktop from an Android browser/app, protected by a random per-session URL token.
 - Runs without administrator elevation by default; start it as administrator only when a specific input/game flow needs elevated input access.
 
+## Download
+
+Most users should download the Windows installer from [GitHub Releases](https://github.com/Roinur/Scrcpy-studio/releases).
+
 ## Install From Source
 
 ```powershell
