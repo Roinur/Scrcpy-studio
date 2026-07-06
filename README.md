@@ -21,7 +21,7 @@ Scrcpy Studio is a Windows-first desktop control surface for scrcpy and ADB. It 
 - Pair, connect, disconnect, and restart ADB from the UI.
 - Automatically repairs wireless ADB when a USB device is available by enabling `adb tcpip`, reading the phone Wi-Fi IP from Android, and reconnecting to `IP:5555`.
 - Includes a reverse remote server for controlling the Windows desktop from an Android browser/app, protected by a random per-session URL token.
-- Runs without administrator elevation by default; start it as administrator only when a specific input/game flow needs elevated input access.
+- Runs elevated by default so OBS/window-capture and remote input workflows keep working reliably during long background sessions.
 
 ## Download
 
