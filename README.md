@@ -22,6 +22,17 @@ Scrcpy Studio is a Windows-first desktop control surface for scrcpy and ADB. It 
 - Automatically repairs wireless ADB when a USB device is available by enabling `adb tcpip`, reading the phone Wi-Fi IP from Android, and reconnecting to `IP:5555`.
 - Includes a reverse remote server for controlling the Windows desktop from an Android browser/app.
 
+## Install From Source
+
+```powershell
+git clone https://github.com/Roinur/Scrcpy-studio.git
+cd Scrcpy-studio
+npm install
+npm run package
+```
+
+The Windows installer is written to `release/`.
+
 ## Development
 
 ```powershell
@@ -35,8 +46,6 @@ npm run dev
 npm run build
 npm run package
 ```
-
-The Windows installer is written to `release/`.
 
 ## Required Vendor Files
 
