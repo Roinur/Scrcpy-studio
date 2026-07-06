@@ -52,11 +52,8 @@ function createWindow() {
     }
   });
   mainWindow.setMenuBarVisibility(false);
-  mainWindow.on('close', (event) => {
-    if (!isQuitting) {
-      event.preventDefault();
-      mainWindow?.hide();
-    }
+  mainWindow.on('close', () => {
+    isQuitting = true;
   });
 
   if (!app.isPackaged && process.env.VITE_DEV_SERVER_URL) {
