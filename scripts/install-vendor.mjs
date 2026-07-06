@@ -71,15 +71,14 @@ async function readJson(url) {
 async function expandZip(zipPath, destination) {
   await fs.rm(destination, { recursive: true, force: true });
   await fs.mkdir(destination, { recursive: true });
+  const quotePowerShellPath = (value) => `'${value.replace(/'/g, "''")}'`;
   await new Promise((resolve, reject) => {
     const child = spawn('powershell.exe', [
       '-NoProfile',
       '-ExecutionPolicy',
       'Bypass',
       '-Command',
-      'Expand-Archive -LiteralPath $args[0] -DestinationPath $args[1] -Force',
-      zipPath,
-      destination
+      `Expand-Archive -LiteralPath ${quotePowerShellPath(zipPath)} -DestinationPath ${quotePowerShellPath(destination)} -Force`
     ], { stdio: 'inherit' });
     child.on('error', reject);
     child.on('close', (code) => {
