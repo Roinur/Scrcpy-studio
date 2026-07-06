@@ -129,7 +129,8 @@ export function createDemoBridge(): BridgeApi {
       return {
         running: reverseRunning,
         port: reversePort,
-        url: reverseRunning ? `http://192.168.1.22:${reversePort}` : undefined,
+        url: reverseRunning ? `http://192.168.1.22:${reversePort}/?token=demo` : undefined,
+        localUrl: reverseRunning ? `http://127.0.0.1:${reversePort}/?token=demo` : undefined,
         reverseAudioBeta,
         stream: reverseStream
       };
@@ -140,7 +141,8 @@ export function createDemoBridge(): BridgeApi {
       return {
         running: true,
         port,
-        url: `http://192.168.1.22:${port}`,
+        url: `http://192.168.1.22:${port}/?token=demo`,
+        localUrl: `http://127.0.0.1:${port}/?token=demo`,
         adbReverseSerial: serial,
         reverseAudioBeta,
         stream: reverseStream
@@ -157,7 +159,8 @@ export function createDemoBridge(): BridgeApi {
       return {
         running: reverseRunning,
         port: reversePort,
-        url: reverseRunning ? `http://192.168.1.22:${reversePort}` : undefined,
+        url: reverseRunning ? `http://192.168.1.22:${reversePort}/?token=demo` : undefined,
+        localUrl: reverseRunning ? `http://127.0.0.1:${reversePort}/?token=demo` : undefined,
         reverseAudioBeta,
         stream: reverseStream
       };
@@ -167,7 +170,8 @@ export function createDemoBridge(): BridgeApi {
       return {
         running: reverseRunning,
         port: reversePort,
-        url: reverseRunning ? `http://192.168.1.22:${reversePort}` : undefined,
+        url: reverseRunning ? `http://192.168.1.22:${reversePort}/?token=demo` : undefined,
+        localUrl: reverseRunning ? `http://127.0.0.1:${reversePort}/?token=demo` : undefined,
         reverseAudioBeta,
         stream: reverseStream
       };

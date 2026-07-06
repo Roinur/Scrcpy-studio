@@ -86,7 +86,7 @@ function html(port: number) {
   <main>
     <header><strong>Scrcpy Studio Remote</strong><small>port ${port}</small></header>
     <section>
-      <img id="screen" src="/frame.png" alt="Windows screen">
+      <img id="screen" alt="Windows screen">
       <div id="state">Waiting for desktop frame...</div>
     </section>
     <footer><input id="keys" placeholder="Type and press enter"><button id="refresh">Refresh</button></footer>
@@ -95,12 +95,18 @@ function html(port: number) {
     const img = document.getElementById('screen');
     const state = document.getElementById('state');
     const keys = document.getElementById('keys');
+    const token = new URLSearchParams(window.location.search).get('token') || '';
     let downAt = 0;
-    function refresh() { img.src = '/frame.jpg?t=' + Date.now(); }
+    function withToken(path) {
+      const url = new URL(path, window.location.href);
+      if (token) url.searchParams.set('token', token);
+      return url.pathname + url.search + url.hash;
+    }
+    function refresh() { img.src = withToken('/frame.jpg?t=' + Date.now()); }
     img.addEventListener('load', () => { state.className = 'ok'; state.textContent = ''; });
     img.addEventListener('error', () => { state.className = ''; state.textContent = 'Could not load desktop frame. Check that Scrcpy Studio remote is running and the phone can reach this URL.'; });
     async function input(payload) {
-      await fetch('/api/input', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(payload) });
+      await fetch(withToken('/api/input'), { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(payload) });
       setTimeout(refresh, 80);
     }
     img.addEventListener('pointerdown', () => { downAt = Date.now(); });
@@ -116,6 +122,7 @@ function html(port: number) {
       }
     });
     document.getElementById('refresh').addEventListener('click', refresh);
+    refresh();
     setInterval(refresh, 50);
   </script>
 </body>
@@ -142,6 +149,7 @@ function webRtcClientHtml() {
   <script>
     const video = document.getElementById('screen');
     const state = document.getElementById('state');
+    const token = new URLSearchParams(window.location.search).get('token') || '';
     let sessionId = null;
     let hostCandidateCursor = 0;
 
@@ -166,8 +174,14 @@ function webRtcClientHtml() {
       return lines.join('\\r\\n');
     }
 
+    function withToken(path) {
+      const url = new URL(path, window.location.href);
+      if (token) url.searchParams.set('token', token);
+      return url.pathname + url.search + url.hash;
+    }
+
     async function postJson(path, body) {
-      const response = await fetch(path, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) });
+      const response = await fetch(withToken(path), { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) });
       if (!response.ok) throw new Error(await response.text());
       return response.json();
     }
@@ -189,7 +203,7 @@ function webRtcClientHtml() {
       const created = await postJson('/api/webrtc/offer', pc.localDescription);
       sessionId = created.id;
       while (!pc.remoteDescription) {
-        const answerResponse = await fetch('/api/webrtc/answer/' + sessionId);
+        const answerResponse = await fetch(withToken('/api/webrtc/answer/' + sessionId));
         if (answerResponse.status === 200) {
           const answer = await answerResponse.json();
           await pc.setRemoteDescription(answer);
@@ -199,7 +213,7 @@ function webRtcClientHtml() {
       }
       setInterval(async () => {
         if (!sessionId) return;
-        const response = await fetch('/api/webrtc/host-candidates/' + sessionId + '?after=' + hostCandidateCursor);
+        const response = await fetch(withToken('/api/webrtc/host-candidates/' + sessionId + '?after=' + hostCandidateCursor));
         if (response.status !== 200) return;
         const data = await response.json();
         hostCandidateCursor = data.next;
@@ -246,6 +260,7 @@ function webRtcHostHtml(settings: ReverseStreamSettings, reverseAudioBeta: boole
 <body>
   <script>
     const settings = ${JSON.stringify(settings)};
+    const token = new URLSearchParams(window.location.search).get('token') || '';
     const peers = new Map();
     let streamPromise = null;
 
@@ -263,8 +278,14 @@ function webRtcHostHtml(settings: ReverseStreamSettings, reverseAudioBeta: boole
       return streamPromise;
     }
 
+    function withToken(path) {
+      const url = new URL(path, window.location.href);
+      if (token) url.searchParams.set('token', token);
+      return url.pathname + url.search + url.hash;
+    }
+
     async function postJson(path, body) {
-      const response = await fetch(path, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) });
+      const response = await fetch(withToken(path), { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) });
       if (!response.ok) throw new Error(await response.text());
       return response.json();
     }
@@ -277,7 +298,7 @@ function webRtcHostHtml(settings: ReverseStreamSettings, reverseAudioBeta: boole
           peers.delete(id);
           return;
         }
-        const response = await fetch('/api/webrtc/client-candidates/' + id + '?after=' + cursor);
+        const response = await fetch(withToken('/api/webrtc/client-candidates/' + id + '?after=' + cursor));
         if (response.status !== 200) return;
         const data = await response.json();
         cursor = data.next;
@@ -303,12 +324,12 @@ function webRtcHostHtml(settings: ReverseStreamSettings, reverseAudioBeta: boole
 
     async function poll() {
       try {
-        const response = await fetch('/api/webrtc/pending');
+        const response = await fetch(withToken('/api/webrtc/pending'));
         const pending = await response.json();
         for (const item of pending) void handleOffer(item);
       } catch (error) {
         console.error(error);
-        void fetch('/api/webrtc/host-error', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ message: error.message || String(error) }) });
+        void fetch(withToken('/api/webrtc/host-error'), { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ message: error.message || String(error) }) });
       }
     }
     setInterval(poll, 350);
@@ -327,6 +348,7 @@ export class ReverseService {
   private webRtcHost: BrowserWindow | null = null;
   private webRtcSessions = new Map<string, WebRtcSignalSession>();
   private actionHandlers: RemoteActionHandlers = {};
+  private authToken: string | undefined;
 
   getStatus(): ReverseServerStatus {
     return { ...this.status, reverseAudioBeta: this.reverseAudioBeta, stream: { ...this.streamSettings } };
@@ -359,6 +381,7 @@ export class ReverseService {
   async start(port: number): Promise<ReverseServerStatus> {
     if (this.server && this.status.port === port) return this.getStatus();
     await this.stop();
+    this.authToken = randomUUID();
 
     this.server = http.createServer((request, response) => {
       void this.handle(request, response);
@@ -372,7 +395,8 @@ export class ReverseService {
     this.status = {
       running: true,
       port,
-      url: `http://${localAddress()}:${port}`,
+      url: `http://${localAddress()}:${port}/?token=${encodeURIComponent(this.authToken)}`,
+      localUrl: `http://127.0.0.1:${port}/?token=${encodeURIComponent(this.authToken)}`,
       reverseAudioBeta: this.reverseAudioBeta,
       stream: this.streamSettings
     };
@@ -382,7 +406,8 @@ export class ReverseService {
 
   async stop(): Promise<ReverseServerStatus> {
     if (!this.server) {
-      this.status = { ...this.status, running: false, adbReverseSerial: undefined, stream: this.streamSettings };
+      this.authToken = undefined;
+      this.status = { ...this.status, running: false, url: undefined, localUrl: undefined, adbReverseSerial: undefined, stream: this.streamSettings };
       return this.getStatus();
     }
     const server = this.server;
@@ -391,7 +416,8 @@ export class ReverseService {
     this.webRtcHost = null;
     this.webRtcSessions.clear();
     await new Promise<void>((resolve) => server.close(() => resolve()));
-    this.status = { ...this.status, running: false, adbReverseSerial: undefined, stream: this.streamSettings };
+    this.authToken = undefined;
+    this.status = { ...this.status, running: false, url: undefined, localUrl: undefined, adbReverseSerial: undefined, stream: this.streamSettings };
     return this.getStatus();
   }
 
@@ -402,6 +428,11 @@ export class ReverseService {
   private async handle(request: IncomingMessage, response: ServerResponse) {
     try {
       const url = new URL(request.url ?? '/', `http://127.0.0.1:${this.status.port}`);
+      if (!this.isAuthorized(request, url)) {
+        response.writeHead(401, { 'content-type': 'text/plain; charset=utf-8', 'cache-control': 'no-store' });
+        response.end('Unauthorized Scrcpy Studio remote request.');
+        return;
+      }
       if (request.method === 'GET' && url.pathname === '/') {
         response.writeHead(200, { 'content-type': 'text/html; charset=utf-8' });
         response.end(html(this.status.port));
@@ -483,6 +514,13 @@ export class ReverseService {
     }
   }
 
+  private isAuthorized(request: IncomingMessage, url: URL) {
+    if (!this.authToken) return false;
+    const headerToken = request.headers['x-scrcpy-studio-token'];
+    const provided = url.searchParams.get('token') ?? (Array.isArray(headerToken) ? headerToken[0] : headerToken);
+    return provided === this.authToken;
+  }
+
   private json(response: ServerResponse, data: unknown) {
     response.writeHead(200, { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store' });
     response.end(JSON.stringify(data));
@@ -519,7 +557,8 @@ export class ReverseService {
     session.defaultSession.setPermissionRequestHandler((_webContents, permission, callback) => {
       callback(permission === 'media');
     });
-    await this.webRtcHost.loadURL(`http://127.0.0.1:${this.status.port}/webrtc-host`);
+    const token = this.authToken ? `?token=${encodeURIComponent(this.authToken)}` : '';
+    await this.webRtcHost.loadURL(`http://127.0.0.1:${this.status.port}/webrtc-host${token}`);
   }
 
   private async listDisplays(): Promise<DisplayInfo[]> {

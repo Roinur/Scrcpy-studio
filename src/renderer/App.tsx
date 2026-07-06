@@ -692,7 +692,7 @@ function App() {
               </div>
               <small>
                 {reverseStatus.adbReverseSerial
-                  ? `USB helper active: open http://127.0.0.1:${reverseStatus.port} on the phone.`
+                  ? `USB helper active: open ${reverseStatus.localUrl ?? reverseStatus.url ?? `http://127.0.0.1:${reverseStatus.port}`} on the phone.`
                   : 'Same Wi-Fi works directly. USB devices also get adb reverse when selected.'} {reverseStream.codec === 'webrtc-h264' ? 'Android uses WebRTC/H.264 with MJPEG as fallback.' : 'MJPEG is the compatibility fallback.'}
               </small>
               <div className="reverseTuning">

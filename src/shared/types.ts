@@ -118,6 +118,7 @@ export interface ReverseServerStatus {
   running: boolean;
   port: number;
   url?: string;
+  localUrl?: string;
   adbReverseSerial?: string;
   lastInputAt?: string;
   displayId?: string;
