@@ -72,3 +72,15 @@ npm run install:vendor
 Scrcpy Studio is built around [`Genymobile/scrcpy`](https://github.com/Genymobile/scrcpy), the official open-source project for displaying and controlling Android devices from a computer. scrcpy is licensed under Apache-2.0.
 
 Android Debug Bridge comes from Google's Android platform-tools.
+
+## License
+
+Scrcpy Studio is licensed under Apache-2.0. See [LICENSE](LICENSE).
+
+Packaged releases include third-party notices in the installed app's `resources/` folder:
+
+- `SCRCPY-LICENSE.txt` for Genymobile/scrcpy.
+- `ANDROID-PLATFORM-TOOLS-NOTICE.txt` for Google's Android platform-tools package.
+- `THIRD_PARTY_NOTICES.md` for a short dependency summary.
+
+See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for details.

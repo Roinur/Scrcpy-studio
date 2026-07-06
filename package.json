@@ -2,6 +2,7 @@
   "name": "scrcpy-studio",
   "version": "0.1.18",
   "description": "A polished Windows-first desktop control surface for scrcpy and ADB.",
+  "license": "Apache-2.0",
   "main": "dist/main/main/main.js",
   "type": "module",
   "scripts": {
@@ -26,6 +27,9 @@
     "files": [
       "dist/**/*",
       "assets/**/*",
+      "LICENSE",
+      "THIRD_PARTY_NOTICES.md",
+      "README.md",
       "package.json"
     ],
     "asar": true,
@@ -39,6 +43,22 @@
         "filter": [
           "**/*"
         ]
+      },
+      {
+        "from": "LICENSE",
+        "to": "LICENSE"
+      },
+      {
+        "from": "THIRD_PARTY_NOTICES.md",
+        "to": "THIRD_PARTY_NOTICES.md"
+      },
+      {
+        "from": "vendor/scrcpy/LICENSE",
+        "to": "SCRCPY-LICENSE.txt"
+      },
+      {
+        "from": "vendor/platform-tools/NOTICE.txt",
+        "to": "ANDROID-PLATFORM-TOOLS-NOTICE.txt"
       }
     ],
     "win": {

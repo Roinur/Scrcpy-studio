@@ -13,6 +13,7 @@ const platformToolsDir = path.join(vendorDir, 'platform-tools');
 const scrcpyDir = path.join(vendorDir, 'scrcpy');
 const platformToolsUrl = 'https://dl.google.com/android/repository/platform-tools-latest-windows.zip';
 const scrcpyLatestApi = 'https://api.github.com/repos/Genymobile/scrcpy/releases/latest';
+const scrcpyLicenseUrl = 'https://raw.githubusercontent.com/Genymobile/scrcpy/master/LICENSE';
 
 async function exists(filePath) {
   try {
@@ -121,6 +122,10 @@ async function installPlatformTools() {
 async function installScrcpy() {
   if (await exists(path.join(scrcpyDir, 'scrcpy.exe'))) {
     console.log('vendor/scrcpy already installed');
+    if (!(await exists(path.join(scrcpyDir, 'LICENSE')))) {
+      console.log('Downloading scrcpy license...');
+      await download(scrcpyLicenseUrl, path.join(scrcpyDir, 'LICENSE'));
+    }
     return;
   }
 
@@ -137,6 +142,10 @@ async function installScrcpy() {
   await download(asset.browser_download_url, zipPath);
   await expandZip(zipPath, extractDir);
   await copyExtractedFolder(extractDir, asset.name.replace(/\.zip$/i, ''), scrcpyDir);
+  if (!(await exists(path.join(scrcpyDir, 'LICENSE')))) {
+    console.log('Downloading scrcpy license...');
+    await download(scrcpyLicenseUrl, path.join(scrcpyDir, 'LICENSE'));
+  }
 }
 
 async function main() {
