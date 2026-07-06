@@ -24,6 +24,7 @@ import {
   RefreshCw,
   ScanLine,
   Settings,
+  Shield,
   Square,
   Sun,
   Terminal,
@@ -54,7 +55,9 @@ function deviceLabel(device: Device, aliases?: Record<string, string>) {
 }
 
 function cloneProfile(profile: LaunchProfile): LaunchProfile {
-  return JSON.parse(JSON.stringify(profile));
+  const cloned = JSON.parse(JSON.stringify(profile)) as LaunchProfile;
+  cloned.system = { requiresAdministrator: cloned.system?.requiresAdministrator ?? false };
+  return cloned;
 }
 
 function sameValue<T>(left: T, right: T) {
@@ -660,6 +663,7 @@ function App() {
               <ToggleCard icon={<Pin size={16} />} label="Always on top" checked={draftProfile.window.alwaysOnTop} onChange={(checked) => updateDraft((p) => (p.window.alwaysOnTop = checked))} />
               <ToggleCard icon={<ScanLine size={16} />} label="Borderless" checked={draftProfile.window.borderless} onChange={(checked) => updateDraft((p) => (p.window.borderless = checked))} />
               <ToggleCard icon={<Maximize size={16} />} label="Fullscreen" checked={draftProfile.window.fullscreen} onChange={(checked) => updateDraft((p) => (p.window.fullscreen = checked))} />
+              <ToggleCard icon={<Shield size={16} />} label="Administrator / background" checked={draftProfile.system?.requiresAdministrator ?? false} onChange={(checked) => updateDraft((p) => { p.system = { requiresAdministrator: checked }; })} />
             </div>
 
             <label className="wideLabel">

@@ -43,6 +43,9 @@ export interface LaunchProfile {
     enabled: boolean;
     path?: string;
   };
+  system?: {
+    requiresAdministrator: boolean;
+  };
   extraArgs: string;
 }
 

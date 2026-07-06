@@ -10,6 +10,7 @@ export const defaultProfiles: LaunchProfile[] = [
     input: { clipboard: true, turnScreenOff: false, stayAwake: true, powerOn: true },
     window: { title: 'Scrcpy Studio - Fast', alwaysOnTop: false, borderless: false, fullscreen: false },
     recording: { enabled: false },
+    system: { requiresAdministrator: false },
     extraArgs: ''
   },
   {
@@ -21,6 +22,7 @@ export const defaultProfiles: LaunchProfile[] = [
     input: { clipboard: true, turnScreenOff: false, stayAwake: true, powerOn: true },
     window: { title: 'Scrcpy Studio - Quality', alwaysOnTop: false, borderless: false, fullscreen: false },
     recording: { enabled: false },
+    system: { requiresAdministrator: false },
     extraArgs: ''
   },
   {
@@ -32,6 +34,7 @@ export const defaultProfiles: LaunchProfile[] = [
     input: { clipboard: true, turnScreenOff: true, stayAwake: false, powerOn: true },
     window: { title: 'Scrcpy Studio - Battery', alwaysOnTop: false, borderless: false, fullscreen: false },
     recording: { enabled: false },
+    system: { requiresAdministrator: false },
     extraArgs: ''
   },
   {
@@ -43,6 +46,7 @@ export const defaultProfiles: LaunchProfile[] = [
     input: { clipboard: true, turnScreenOff: true, stayAwake: true, powerOn: true },
     window: { title: 'Scrcpy Studio - Work', alwaysOnTop: true, borderless: false, fullscreen: false },
     recording: { enabled: false },
+    system: { requiresAdministrator: true },
     extraArgs: ''
   }
 ];
