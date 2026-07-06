@@ -31,6 +31,8 @@ npm install
 npm run package
 ```
 
+`npm install` downloads the Windows `scrcpy` and Android platform-tools binaries into `vendor/` automatically.
+
 The Windows installer is written to `release/`.
 
 ## Development
@@ -49,10 +51,16 @@ npm run package
 
 ## Required Vendor Files
 
-The packaged app expects these folders in `vendor/`:
+The packaged app expects these folders in `vendor/`, created automatically by `npm install`:
 
 - `platform-tools/` with `adb.exe`
 - `scrcpy/` with `scrcpy.exe`
+
+To refresh them manually:
+
+```powershell
+npm run install:vendor
+```
 
 ## Credits
 

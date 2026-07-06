@@ -4,6 +4,7 @@ release/
 .vite/
 coverage/
 npm-debug.log*
+.vendor-cache/
 vendor/scrcpy/
 vendor/platform-tools/
 *.local
